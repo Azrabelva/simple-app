@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
   // ubah 'youruser/simple-app' dengan nama kamu dan repo proyek kamu
-    IMAGE_NAME = 'youruser/simple-app'
+    IMAGE_NAME = 'belvaaaaa/simple-app'
   // ubah 'dockerhub-credentials' dengan credential yang sudah kamu buat 
     REGISTRY_CREDENTIALS = 'dockerhub-credentials'
   }
@@ -26,7 +26,7 @@ pipeline {
       steps {
         withCredentials([usernamePassword(credentialsId: env.REGISTRY_CREDENTIALS, usernameVariable: 'USER', passwordVariable: 'PASS')]) {
           bat """docker login -u %USER% -p %PASS%"""
-          bat """docker push ${env.IMAG E_NAME}:${env.BUILD_NUMBER}"""
+          bat """docker push ${env.IMAGE_NAME}:${env.BUILD_NUMBER}"""
           bat """docker tag ${env.IMAGE_NAME}:${env.BUILD_NUMBER} ${env.IMAGE_NAME}:latest"""
           bat """docker push ${env.IMAGE_NAME}:latest"""
         }

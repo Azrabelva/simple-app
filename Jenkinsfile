@@ -26,7 +26,7 @@ pipeline {
       steps {
         withCredentials([usernamePassword(credentialsId: env.REGISTRY_CREDENTIALS, usernameVariable: 'USER', passwordVariable: 'PASS')]) {
           bat """docker login -u %USER% -p %PASS%"""
-          bat """docker push ${env.IMAG E_NAME}:${env.BUILD_NUMBER}"""
+          bat """docker push ${env.IMAGE_NAME}:${env.BUILD_NUMBER}"""
           bat """docker tag ${env.IMAGE_NAME}:${env.BUILD_NUMBER} ${env.IMAGE_NAME}:latest"""
           bat """docker push ${env.IMAGE_NAME}:latest"""
         }

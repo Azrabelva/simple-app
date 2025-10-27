@@ -1,14 +1,32 @@
-# Gunakan image base Python
-FROM python:3.10-slim
+# Use Node.js 18 as base image
+FROM node:18-alpine
+
 # Set working directory
 WORKDIR /app
-# Copy file requirements.txt ke container
-COPY requirements.txt ./
+
+# Copy package files
+COPY package*.json ./
+
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-# Copy seluruh file project ke /app
+RUN npm install
+
+# Copy source code
 COPY . .
-# Expose port untuk Flask / FastAPI
-EXPOSE 5000
-# Jalankan aplikasi
-CMD ["python", "app.py"]
+
+# Build the app
+RUN npm run build
+
+# Use nginx to serve the app
+FROM nginx:alpine
+
+# Copy built app to nginx
+COPY --from=0 /app/build /usr/share/nginx/html
+
+# Copy custom nginx config
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Expose port 80
+EXPOSE 80
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
